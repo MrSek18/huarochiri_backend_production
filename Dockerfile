@@ -1,6 +1,6 @@
-FROM php:8.2-fpm
+FROM php:8.2-cli
 
-# Instala dependencias del sistema
+# Instala dependencias
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
@@ -12,21 +12,20 @@ RUN apt-get update && apt-get install -y \
     git \
     nano \
     libzip-dev \
-    && docker-php-ext-install pdo_mysql mbstring zip exif pcntl
+    && docker-php-ext-install pdo_mysql mbstring zip
 
 # Instala Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copia el proyecto Laravel
+# Copia el proyecto
 COPY . /var/www/html
 WORKDIR /var/www/html
 
-# Instala dependencias de Laravel
+# Instala dependencias Laravel
 RUN composer install --no-dev --optimize-autoloader
 
-# Da permisos a Laravel
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage
+# Da permisos
+RUN chmod -R 755 storage bootstrap/cache
 
 # Variables de entorno
 ENV APP_ENV=production
@@ -42,5 +41,5 @@ ENV DB_PASSWORD=tu_contraseña
 # Expone el puerto
 EXPOSE 8000
 
-# Comando para iniciar Laravel
+# Comando de arranque
 CMD php artisan serve --host=0.0.0.0 --port=8000
