@@ -54,3 +54,6 @@ Route::get('/test-db', function () {
         return response()->json(['error' => $e->getMessage()]);
     }
 });
+Route::get('/ping', function () {
+    return response()->json(['pong' => true]);
+});
