@@ -48,7 +48,7 @@ use Illuminate\Support\Facades\DB;
 
 Route::get('/test-db', function () {
     try {
-        $clientes = DB::table('clientes')->get(); // Cambia 'clientes' por una tabla que exista en tu base
+        $clientes = DB::table('users')->get();
         return response()->json($clientes);
     } catch (\Exception $e) {
         return response()->json(['error' => $e->getMessage()]);
