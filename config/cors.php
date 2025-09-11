@@ -8,6 +8,7 @@ return [
     'allowed_origins' => [
         'http://localhost:3000',
         'https://mi-frontend.loca.lt',
+        'https://huarochiri-frontend-production.vercel.app'
     ],
 
     'allowed_origins_patterns' => [],
