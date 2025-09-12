@@ -33,7 +33,7 @@ class AuthController extends Controller
         // Verificación reCAPTCHA mejorada
         $recaptchaSecret = env('RECAPTCHA_SECRET_KEY');
         $recaptchaResponse = $validated['g-recaptcha-response'];
-        
+
         $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
             'secret' => $recaptchaSecret,
             'response' => $recaptchaResponse,
@@ -48,12 +48,12 @@ class AuthController extends Controller
                 'errors' => $responseData['error-codes'] ?? [],
                 'request' => $request->all()
             ]);
-            
+
             return response()->json([
                 'message' => 'Error en verificación de seguridad',
                 'errors' => [
                     'g-recaptcha-response' => [
-                        'La verificación reCAPTCHA falló. Código: '.($responseData['error-codes'][0] ?? 'unknown')
+                        'La verificación reCAPTCHA falló. Código: ' . ($responseData['error-codes'][0] ?? 'unknown')
                     ]
                 ]
             ], 422);
@@ -99,10 +99,10 @@ class AuthController extends Controller
         }
 
         $user = User::where('email', $request->email)->firstOrFail();
-        
+
         // Elimina tokens existentes para evitar múltiples sesiones
         $user->tokens()->delete();
-        
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
